@@ -1,0 +1,92 @@
+seed: 42
+
+models:
+  separate: true
+  policy:
+    class: GaussianMixin
+    clip_actions: false
+    clip_log_std: true
+    min_log_std: -3.5
+    max_log_std: 2.0
+    initial_log_std: -1.2
+    fixed_log_std: false
+    network:
+      - name: net
+        input: OBSERVATIONS
+        layers: [512, 256]
+        activations: relu
+    output: ACTIONS
+  value:
+    class: DeterministicMixin
+    clip_actions: false
+    network:
+      - name: net
+        input: OBSERVATIONS
+        layers: [512, 256]
+        activations: relu
+    output: ONE
+  discriminator:
+    class: DeterministicMixin
+    clip_actions: false
+    network:
+      - name: net
+        input: OBSERVATIONS
+        layers: [1024, 512, 256]
+        activations: relu
+    output: ONE
+
+memory:
+  class: RandomMemory
+  memory_size: -1
+motion_dataset:
+  class: RandomMemory
+  memory_size: 200000
+reply_buffer:
+  class: RandomMemory
+  memory_size: 1000000
+
+agent:
+  class: AMP
+  rollouts: 16
+  learning_epochs: 6
+  mini_batches: 2
+  discount_factor: 0.99
+  gae_lambda: 0.95
+  learning_rate: 5.0e-05
+  learning_rate_scheduler: null
+  learning_rate_scheduler_kwargs: null
+  observation_preprocessor: RunningStandardScaler
+  observation_preprocessor_kwargs: null
+  state_preprocessor: null
+  state_preprocessor_kwargs: null
+  value_preprocessor: RunningStandardScaler
+  value_preprocessor_kwargs: null
+  amp_observation_preprocessor: RunningStandardScaler
+  amp_observation_preprocessor_kwargs: null
+  random_timesteps: 0
+  learning_starts: 0
+  grad_norm_clip: 0.0
+  ratio_clip: 0.2
+  value_clip: 0.2
+  entropy_loss_scale: 0.0
+  value_loss_scale: 2.5
+  discriminator_loss_scale: 6.0
+  amp_batch_size: 512
+  # Pure AMP: the environment task reward and its scale are both zero.
+  task_reward_scale: 0.5
+  style_reward_scale: 2.0
+  discriminator_batch_size: 4096
+  discriminator_logit_regularization_scale: 0.05
+  discriminator_gradient_penalty_scale: 5.0
+  discriminator_weight_decay_scale: 1.0e-04
+  time_limit_bootstrap: true
+  experiment:
+    directory: g1_jose_amp_jump
+    experiment_name: ""
+    write_interval: auto
+    checkpoint_interval: auto
+
+trainer:
+  class: SequentialTrainer
+  timesteps: 100000
+  environment_info: log
