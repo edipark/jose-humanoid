@@ -93,6 +93,16 @@
   .stage { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
   .stage h3 { font-size: 1rem; margin: 0 0 6px; }
   .stage p { font-size: .93rem; margin: 0; color: var(--muted); }
+  .compare-intro { text-align: center; color: var(--muted); max-width: 720px; margin: 0 auto 20px; }
+  .tasks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  @media (max-width: 720px) { .tasks { grid-template-columns: 1fr; } }
+  .task h3 { font-size: 1.05rem; margin: 0 0 8px; }
+  .task h3 span { color: var(--muted); font-weight: 400; font-size: .9rem; }
+  .task-video { border-radius: 10px; overflow: hidden; background: #000; }
+  .task-video video { display: block; width: 100%; height: auto; }
+  .sides { display: grid; grid-template-columns: 1fr 1fr; font-size: .85rem; font-weight: 600; margin-bottom: 6px; }
+  .sides span { text-align: center; }
+  .sides .jose { color: var(--accent); }
   footer { color: var(--muted); font-size: .85rem; text-align: center; padding: 32px 0 48px; border-top: 1px solid var(--line); }
   footer a { color: inherit; }
 </style>
@@ -129,6 +139,33 @@
   <h2>Abstract</h2>
   <p>Deploying a humanoid policy trained on privileged simulator states means inferring those states on hardware, where joint encoders and an IMU are the usual sensors. The IMU carries base orientation and angular velocity, but its signal drifts and is disturbed by foot-strike impacts. During stance, leg kinematics constrain base motion relative to the supporting feet, motivating learned prediction of inertial state from joint history. We therefore test whether encoder history alone suffices to recover a teacher's required states, the inertial components among them, without losing control performance.</p>
   <p>We present JOSE (Joint-Only State Estimator), a recurrent estimator that maps a window of joint-encoder history to the teacher's privileged state, the orientation and angular velocity normally read from an IMU included, and hands it to a frozen teacher that acts with no IMU in the control loop. Training uses simulator-state regression with dataset aggregation. On three motion-tracking teachers trained with Adversarial Motion Priors and one command-conditioned locomotion teacher, driving the frozen teacher with JOSE halves the motion error of joint-only action distillation and tracks locomotion commands nearly as well as ground-truth observations. Reconstructing the inertial state rather than reading it leaves control unaffected by IMU noise, though encoder noise still degrades it without noise-aware training.</p>
+</section>
+
+<section>
+  <h2>Teacher vs. Teacher + JOSE</h2>
+  <p class="compare-intro">In each clip the left half is the teacher acting on ground-truth privileged state. The right half is the same frozen teacher acting on JOSE's estimate from joint-encoder history, with no IMU. Both halves play in lockstep from the same seed.</p>
+  <div class="tasks">
+    <div class="task">
+      <h3>AMP Walk</h3>
+      <div class="sides"><span>Teacher</span><span class="jose">Teacher + JOSE</span></div>
+      <div class="task-video"><video autoplay muted loop playsinline preload="metadata" src="static/tasks/amp_walk.mp4"></video></div>
+    </div>
+    <div class="task">
+      <h3>AMP Dance</h3>
+      <div class="sides"><span>Teacher</span><span class="jose">Teacher + JOSE</span></div>
+      <div class="task-video"><video autoplay muted loop playsinline preload="metadata" src="static/tasks/amp_dance.mp4"></video></div>
+    </div>
+    <div class="task">
+      <h3>AMP Jump</h3>
+      <div class="sides"><span>Teacher</span><span class="jose">Teacher + JOSE</span></div>
+      <div class="task-video"><video autoplay muted loop playsinline preload="metadata" src="static/tasks/amp_jump.mp4"></video></div>
+    </div>
+    <div class="task">
+      <h3>Velocity-Command Locomotion <span>(v<sub>x</sub> = 0.6 m/s)</span></h3>
+      <div class="sides"><span>Teacher</span><span class="jose">Teacher + JOSE</span></div>
+      <div class="task-video"><video autoplay muted loop playsinline preload="metadata" src="static/tasks/locomotion.mp4"></video></div>
+    </div>
+  </div>
 </section>
 
 <section>
