@@ -11,6 +11,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
 <style>
   :root {
+    color-scheme: light;
     --bg: #ffffff;
     --fg: #1a1a1a;
     --muted: #5b6270;
@@ -19,18 +20,6 @@
     --btn: #1a1a1a;
     --btn-fg: #ffffff;
     --accent: #2f5bd3;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #111316;
-      --fg: #e8eaed;
-      --muted: #9aa1ad;
-      --line: #2a2e35;
-      --card: #1a1d22;
-      --btn: #e8eaed;
-      --btn-fg: #111316;
-      --accent: #7ea2ff;
-    }
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -117,7 +106,6 @@
   .task-name { text-align: center; font-weight: 700; font-size: 1.05rem; color: var(--fg); margin-top: 10px; }
   .task-name span { color: var(--muted); font-weight: 400; font-size: .9rem; }
   .noimu { color: #d62828; }
-  @media (prefers-color-scheme: dark) { .noimu { color: #ff6b6b; } }
   footer { color: var(--muted); font-size: .85rem; text-align: center; padding: 32px 0 48px; border-top: 1px solid var(--line); }
   footer a { color: inherit; }
 </style>
